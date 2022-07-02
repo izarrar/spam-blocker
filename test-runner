@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+cd ./Workspace/spam-blocker
+rm -r allure-results
+rm -r allure-report*
+npm test run ./test-config.js
+now=`date +%d-%m-%Y-%H-%M-%S`
+fdrn=allure-report-
+sfdrn=http://167.235.231.117/allure-report-
+fdrn+=$now
+sfdrn+=$now
+mv allure-report* ${fdrn}
+scp -r allure-report* root@167.235.231.117:/var/www/allure_reports
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Automation Report Generated\nClick below link to view report:\n'"$sfdrn"'"}' https://hooks.slack.com/services/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
